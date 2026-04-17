@@ -1,81 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Language Toggle Logic
+    const langToggle = document.getElementById('lang-toggle');
+    const translatableElements = document.querySelectorAll('[data-i18n]');
 
-    // 1. Efecto Scroll en Navbar
-    const navbar = document.getElementById('navbar');
-    
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
-
-    // 2. Mobile Menu (Hamburger)
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    const links = document.querySelectorAll('.nav-links li a');
-    
-    if (hamburger) {
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            
-            // Toggle hamburger animation
-            const spans = hamburger.querySelectorAll('span');
-            if (navLinks.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
-            } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-            }
-        });
-
-        // Close menu on link click
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                const spans = hamburger.querySelectorAll('span');
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-            });
-        });
-    }
-
-    // 3. Scroll Reveal Animations (Intersection Observer)
-    const revealElements = document.querySelectorAll('.reveal-up');
-    
-    const revealOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
-
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            
-            entry.target.classList.add('active');
-            observer.unobserve(entry.target);
-        });
-    }, revealOptions);
-
-    revealElements.forEach(el => {
-        revealObserver.observe(el);
-    });
-    
-    // Trigger scroll event once on load to show elements in viewport
-    window.dispatchEvent(new Event('scroll'));
-
-    // 4. Language Translation
     const translations = {
         es: {
             nav_home: "Inicio",
             nav_services: "Servicios",
+            nav_materials: "Materiales",
             nav_projects: "Proyectos",
             nav_contact: "Contacto",
+            nav_legacy: "Nuestro Legado",
+            leg_header: "La Esencia de la Madera",
+            leg_p1: "Nuestra historia se escribe en las vetas del nogal y el roble. Con más de 35 años de experiencia, hemos perfeccionado el arte de escuchar a la madera antes de tocarla con una gubia.",
+            leg_p2: "Cada pieza es un diálogo entre la naturaleza y la precisión técnica, diseñada para trascender el tiempo y las tendencias.",
+            mat_header: "Maderas Nobles",
+            mat_1_title: "Nogal Americano",
+            mat_1_desc: "Profundidad y carácter en una veta oscura incomparable.",
+            mat_2_title: "Roble Europeo",
+            mat_2_desc: "Fuerza estructural con una elegancia atemporal y cálida.",
+            mat_3_title: "Caoba Selección",
+            mat_3_desc: "El tono rojizo del lujo clásico, ahora reinterpretado.",
+            contact_header: "Inicie Su Proyecto",
+            form_name: "Nombre y Apellidos",
+            form_email: "Correo Electrónico",
+            form_message: "Detalles del Proyecto",
+            form_submit: "Confirmar Solicitud",
+            form_success: "¡Mensaje enviado con éxito! Nos contactaremos pronto.",
             hero_title: "Prestige Wood Solutions LLC",
             hero_subtitle: "Arte y precisión en cada veta.",
             hero_cta: "Solicitar Consultoría Privada",
@@ -91,17 +42,22 @@ document.addEventListener('DOMContentLoaded', () => {
             proj_2: "Puerta Monumental de Nogal",
             proj_3: "Estructura de Vigas Vistas",
             proj_4: "Comedor a Medida",
-            proj_5: "Obra de Autor",
-            proj_6: "Detalle de Carpintería",
-            proj_7: "Acabado Premium",
-            proj_8: "Instalación Especializada",
-            proj_9: "Diseño de Veta",
+            stat_projects: "Proyectos de Autor",
+            stat_years: "Años de Maestría",
+            stat_satisfaction: "Excelencia Garantizada",
+            val_1_title: "Sostenibilidad",
+            val_1_desc: "Compromiso con el uso de maderas de origen certificado y procesos de bajo impacto ambiental.",
+            val_2_title: "Precisión Milimétrica",
+            val_2_desc: "Cada corte y ensamble es verificado bajo los estándares más estrictos de la alta carpintería.",
+            val_3_title: "Trascendencia",
+            val_3_desc: "No creamos objetos temporales; diseñamos piezas destinadas a ser heredadas por generaciones.",
+            trans_header: "El Poder de la Transformación",
             footer_slogan: "Arte y precisión en cada veta.",
             footer_contact_header: "Consultoría Privada & Ubicación",
             footer_contact_desc: "Para comisiones y proyectos especiales, visítanos o contáctanos.",
             footer_map: "📍 Abrir en Google Maps",
-            footer_rights: "&copy; 2026 Prestige Wood Solutions LLC. Todos los derechos reservados.",
-            test_header: "Clientela Distinguida",
+            footer_rights: "Todos los derechos reservados.",
+            testimonials_header: "Voces de Excelencia",
             test_1_quote: "\"Trabajar con Prestige Wood Solutions ha sido la mejor decisión para nuestros proyectos residenciales. Su seriedad en los plazos y la ejecución impecable de la madera marcan un estándar difícil de igualar.\"",
             test_1_name: "Julián Alarcón",
             test_1_role: "Arquitecto Senior",
@@ -121,119 +77,217 @@ document.addEventListener('DOMContentLoaded', () => {
         en: {
             nav_home: "Home",
             nav_services: "Services",
+            nav_materials: "Materials",
             nav_projects: "Projects",
             nav_contact: "Contact",
+            nav_legacy: "Our Legacy",
+            leg_header: "The Essence of Wood",
+            leg_p1: "Our history is written in the grains of walnut and oak. With over 35 years of experience, we have perfected the art of listening to the wood before touching it with a gouge.",
+            leg_p2: "Each piece is a dialogue between nature and technical precision, designed to transcend time and trends.",
+            mat_header: "Noble Woods",
+            mat_1_title: "American Walnut",
+            mat_1_desc: "Intense dark tones and a tight grain pattern for maximum sophistication.",
+            mat_2_title: "European Oak",
+            mat_2_desc: "Structural strength with a warm and timeless elegance.",
+            mat_3_title: "Select Mahogany",
+            mat_3_desc: "The reddish tone of classic luxury, now reinterpreted.",
+            contact_header: "Start Your Project",
+            form_name: "Full Name",
+            form_email: "Email Address",
+            form_message: "Project Details",
+            form_submit: "Confirm Request",
+            form_success: "Message sent successfully! We will contact you soon.",
             hero_title: "Prestige Wood Solutions LLC",
             hero_subtitle: "Art and precision in every grain.",
             hero_cta: "Request Private Consultation",
             services_header: "Our Mastery",
             srv_1_title: "Design & Planning",
-            srv_1_desc: "Meticulous analysis and layout to bring your vision to life with perfect proportions before the first cut.",
-            srv_2_title: "Custom Furniture",
-            srv_2_desc: "Exclusive pieces assembled with noble woods, respecting natural textures to create eternal furniture.",
+            srv_1_desc: "Meticulous analysis and mapping so your vision comes to life with perfect proportions.",
+            srv_2_title: "Bespoke Furniture",
+            srv_2_desc: "Exclusive pieces assembled with noble woods, respecting the natural texture.",
             srv_3_title: "Architectural Installations",
-            srv_3_desc: "From monumental doors to ceiling beams and claddings that define the luxury of any space.",
-            proj_header: "Signature Projects",
-            proj_1: "Signature Oak Kitchen",
+            srv_3_desc: "From monumental doors to beams and coatings that define the luxury of any space.",
+            proj_header: "Author Portfolio",
+            proj_1: "Author Kitchen in Oak",
             proj_2: "Monumental Walnut Door",
             proj_3: "Exposed Beam Structure",
-            proj_4: "Custom Dining Room",
-            proj_5: "Signature Masterpiece",
-            proj_6: "Carpentry Detail",
-            proj_7: "Premium Finish",
-            proj_8: "Specialized Installation",
-            proj_9: "Grain Design",
+            proj_4: "Dining Room",
+            stat_projects: "Signature Projects",
+            stat_years: "Years of Mastery",
+            stat_satisfaction: "Guaranteed Excellence",
+            val_1_title: "Sustainability",
+            val_1_desc: "Commitment to the use of wood from certified origin.",
+            val_2_title: "Millimeter Precision",
+            val_2_desc: "Each cut and assembly is verified under strict standards.",
+            val_3_title: "Transcendence",
+            val_3_desc: "We design pieces destined to be inherited for generations.",
+            trans_header: "The Power of Transformation",
             footer_slogan: "Art and precision in every grain.",
             footer_contact_header: "Private Consultation & Location",
-            footer_contact_desc: "For commissions and special projects, visit or contact us.",
+            footer_contact_desc: "For commissions and special projects, visit us or contact us.",
             footer_map: "📍 Open in Google Maps",
-            footer_rights: "&copy; 2026 Prestige Wood Solutions LLC. All rights reserved.",
-            test_header: "Distinguished Clientele",
-            test_1_quote: "\"Working with Prestige Wood Solutions has been the best decision for our residential projects. Their seriousness in deadlines and the impeccable execution of woodwork set a standard hard to match.\"",
+            footer_rights: "All rights reserved.",
+            testimonials_header: "Voices of Excellence",
+            test_1_quote: "\"Working with Prestige Wood Solutions was the best decision for our residential projects. Their seriousness in deadlines and execution marks a standard difficult to match.\"",
             test_1_name: "Julián Alarcón",
             test_1_role: "Senior Architect",
-            test_2_quote: "\"The technical precision of their team is absolute. They have proven to be extremely serious professionals, delivering pieces with impeccable finishes that elevate the value of any luxury property.\"",
+            test_2_quote: "\"The technical precision of their team is absolute. They have proven to be extremely serious professionals, delivering pieces with impeccable finishes.\"",
             test_2_name: "Elena Santamaría",
             test_2_role: "Interior Designer",
-            test_3_quote: "\"I sought exclusivity and found exemplary management here. Their work on custom furniture is impeccable; undoubtedly, the best choice for those who value detail and formality.\"",
+            test_3_quote: "\"I was looking for exclusivity and found exemplary management. Their work in custom furniture is impeccable; the best option for detail and formality.\"",
             test_3_name: "Marcos V. Riva",
             test_3_role: "Private Client",
-            test_4_quote: "\"Choosing Prestige was the best technical decision of the year. They proved to be exceptionally serious, solving high-complexity assemblies with impeccable final results.\"",
+            test_4_quote: "\"Choosing Prestige was the best technical decision of the year. They proved to be exceptionally serious people, solving high-complexity assemblies.\"",
             test_4_name: "Isabel Córcega",
-            test_4_role: "Projects Director",
-            test_5_quote: "\"Their formality in handling every task is outstanding. Their serious approach and impeccable attention to detail justify considering them the best high-luxury option.\"",
+            test_4_role: "Project Director",
+            test_5_quote: "\"The formality they handle each commission with is outstanding. Their serious approach and level of detail justify considering them the best high-luxury option.\"",
             test_5_name: "Diego Astorga",
             test_5_role: "Real Estate Investor"
         }
     };
 
     let currentLang = 'es';
-    const langToggle = document.getElementById('lang-toggle');
-    const elementsToTranslate = document.querySelectorAll('[data-i18n]');
 
-    if (langToggle) {
-        langToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            currentLang = currentLang === 'es' ? 'en' : 'es';
-            langToggle.textContent = currentLang === 'es' ? 'EN' : 'ES'; 
-            
-            elementsToTranslate.forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[currentLang][key]) {
-                    if (key === 'footer_rights') {
-                        el.innerHTML = translations[currentLang][key]; // preserve HTML tags like &copy;
-                    } else {
-                        el.textContent = translations[currentLang][key];
-                    }
-                }
-            });
+    const updateLang = () => {
+        translatableElements.forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[currentLang][key]) {
+                el.innerHTML = translations[currentLang][key];
+            }
         });
-    }
+        langToggle.textContent = currentLang === 'es' ? 'EN' : 'ES';
+    };
 
-    // 5. Portfolio Carousel
-    const track = document.getElementById('portfolio-track');
-    const prevButton = document.getElementById('carousel-prev');
-    const nextButton = document.getElementById('carousel-next');
+    langToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentLang = currentLang === 'es' ? 'en' : 'es';
+        updateLang();
+    });
 
-    if (track && prevButton && nextButton) {
-        let currentIndex = 0;
-        
-        const updateCarousel = () => {
-            const slide = track.querySelector('.carousel-slide');
-            if(slide) {
-                const slideWidth = slide.clientWidth;
+    // 2. Navbar transparency on scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.style.background = 'rgba(26, 26, 27, 0.98)';
+            navbar.style.padding = '1rem 5%';
+        } else {
+            navbar.style.background = 'rgba(26, 26, 27, 0.95)';
+            navbar.style.padding = '1.5rem 5%';
+        }
+    });
+
+    // 3. Hamburger Menu
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+
+    // 4. Scroll Reveal
+    const revealElements = document.querySelectorAll('.reveal-up');
+    const revealOnScroll = () => {
+        revealElements.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) {
+                el.classList.add('active');
+            }
+        });
+    };
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll(); // Initial check
+
+    // 5. Carousels
+    const initCarousel = (trackId, prevId, nextId) => {
+        const track = document.getElementById(trackId);
+        const prevButton = document.getElementById(prevId);
+        const nextButton = document.getElementById(nextId);
+
+        if (track && prevButton && nextButton) {
+            let currentIndex = 0;
+            const updateCarousel = () => {
+                const slideWidth = track.querySelector('.carousel-slide').offsetWidth;
                 track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-            }
-        };
+            };
 
-        const getVisibleSlides = () => {
-            if (window.innerWidth >= 900) return 3;
-            if (window.innerWidth >= 768) return 2;
-            return 1;
-        };
+            const getVisibleSlides = () => {
+                if (window.innerWidth >= 900) return 3;
+                return 1;
+            };
 
-        nextButton.addEventListener('click', () => {
-            const totalSlides = track.children.length;
-            const visible = getVisibleSlides();
-            if (currentIndex < totalSlides - visible) {
-                currentIndex++;
-            } else {
-                currentIndex = 0;
-            }
-            updateCarousel();
+            nextButton.addEventListener('click', () => {
+                const totalSlides = track.children.length;
+                const visible = getVisibleSlides();
+                if (currentIndex < totalSlides - visible) {
+                    currentIndex++;
+                } else {
+                    currentIndex = 0;
+                }
+                updateCarousel();
+            });
+
+            prevButton.addEventListener('click', () => {
+                const totalSlides = track.children.length;
+                const visible = getVisibleSlides();
+                if (currentIndex > 0) {
+                    currentIndex--;
+                } else {
+                    currentIndex = totalSlides - visible;
+                }
+                updateCarousel();
+            });
+
+            window.addEventListener('resize', updateCarousel);
+        }
+    };
+
+    initCarousel('portfolio-track', 'carousel-prev', 'carousel-next');
+    initCarousel('testimonials-track', 'testimonials-prev', 'testimonials-next');
+
+    // 6. Transformation Slider
+    initTransformationSlider();
+
+    // 7. Contact Form Simulation
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const status = document.getElementById('form-status');
+            status.style.display = 'block';
+            contactForm.reset();
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
         });
-
-        prevButton.addEventListener('click', () => {
-            const totalSlides = track.children.length;
-            const visible = getVisibleSlides();
-            if (currentIndex > 0) {
-                currentIndex--;
-            } else {
-                currentIndex = totalSlides - visible;
-            }
-            updateCarousel();
-        });
-
-        window.addEventListener('resize', updateCarousel);
     }
 });
+
+function initTransformationSlider() {
+    const slider = document.getElementById('before-after-slider');
+    if (!slider) return;
+
+    const beforeImg = slider.querySelector('.image-before');
+    const handle = slider.querySelector('.slider-handle');
+    let isResizing = false;
+
+    const moveSlider = (clientX) => {
+        const rect = slider.getBoundingClientRect();
+        let position = ((clientX - rect.left) / rect.width) * 100;
+        if (position < 0) position = 0;
+        if (position > 100) position = 100;
+        beforeImg.style.width = `${position}%`;
+        handle.style.left = `${position}%`;
+    };
+
+    handle.addEventListener('mousedown', () => isResizing = true);
+    window.addEventListener('mouseup', () => isResizing = false);
+    window.addEventListener('mousemove', (e) => {
+        if (isResizing) moveSlider(e.clientX);
+    });
+
+    handle.addEventListener('touchstart', () => isResizing = true);
+    window.addEventListener('touchend', () => isResizing = false);
+    window.addEventListener('touchmove', (e) => {
+        if (isResizing) moveSlider(e.touches[0].clientX);
+    });
+}
